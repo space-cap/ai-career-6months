@@ -1,0 +1,56 @@
+# Python 가상환경
+.venv/
+__pycache__/
+*.pyc
+
+# Poetry / Pip
+poetry.lock
+
+# 환경 변수
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 로그 / 캐시
+logs/
+*.log
+.cache/
+
+# ChromaDB (VectorDB)
+chroma_db/
+.chroma/
+
+# 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
+
+# 테스트 관련
+.pytest_cache/
+htmlcov/
+.coverage
+.tox/
+*.cover
+
+# Python 빌드 파일
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# 임시 파일
+tmp/
+temp/
+*.tmp
