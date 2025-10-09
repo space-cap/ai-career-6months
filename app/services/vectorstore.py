@@ -3,17 +3,31 @@ from langchain_openai import OpenAIEmbeddings
 from app.core.config import settings
 import os
 from functools import lru_cache
+from enum import Enum
+
+
+class EmbeddingModel(str, Enum):
+    """OpenAI 임베딩 모델 선택"""
+    ADA_002 = "text-embedding-ada-002"  # 가성비 좋음 ($0.10/1M tokens)
+    SMALL = "text-embedding-3-small"    # 가장 저렴 ($0.02/1M tokens)
+    LARGE = "text-embedding-3-large"    # 최고 성능 ($0.13/1M tokens)
 
 
 @lru_cache(maxsize=1)
-def get_vectorstore():
+def get_vectorstore(embedding_model: EmbeddingModel = EmbeddingModel.SMALL):
     """
     Chroma VectorStore 초기화 (싱글톤 패턴)
 
     첫 호출 시에만 인스턴스를 생성하고, 이후 호출에서는 캐시된 인스턴스를 재사용합니다.
+
+    Args:
+        embedding_model (EmbeddingModel): 사용할 OpenAI 임베딩 모델. 기본값은 SMALL.
     """
     os.makedirs(settings.CHROMA_PATH, exist_ok=True)
-    embeddings = OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY)
+    embeddings = OpenAIEmbeddings(
+        model=embedding_model.value,
+        openai_api_key=settings.OPENAI_API_KEY
+    )
     vectorstore = Chroma(
         collection_name="ai_career_docs",
         embedding_function=embeddings,
