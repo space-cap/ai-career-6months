@@ -34,13 +34,11 @@ def ingest_docs():
         print(f"→ 임베딩 중: {file_name}")
 
         try:
-            # 벡터스토어에 추가
+            # 벡터스토어에 추가 (persist_directory 지정 시 자동 저장)
             store.add_texts([text], metadatas=[{"source": file_name}])
         except Exception as e:
             print(f"⚠️ {file_name} 처리 중 오류 발생: {e}")
 
-    # DB 저장
-    store.persist()
     print("\n✅ 모든 문서 임베딩 완료!")
     print(f"📁 Chroma 경로: {settings.CHROMA_PATH}")
 

@@ -40,13 +40,14 @@ def add_document(text: str, metadata: dict = None):
     """
     VectorStore에 텍스트 문서를 추가합니다.
 
+    persist_directory가 지정되어 있으면 자동으로 저장됩니다.
+
     Args:
         text (str): 추가할 텍스트 문서
         metadata (dict, optional): 문서와 함께 저장할 메타데이터 (예: {"source": "README.md"})
     """
     store = get_vectorstore()
     store.add_texts([text], metadatas=[metadata or {}])
-    store.persist()
 
 
 def search_document(query: str, k: int = 3):
