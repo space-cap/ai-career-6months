@@ -2,10 +2,16 @@ from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from app.core.config import settings
 import os
+from functools import lru_cache
 
 
+@lru_cache(maxsize=1)
 def get_vectorstore():
-    """Chroma VectorStore 초기화"""
+    """
+    Chroma VectorStore 초기화 (싱글톤 패턴)
+
+    첫 호출 시에만 인스턴스를 생성하고, 이후 호출에서는 캐시된 인스턴스를 재사용합니다.
+    """
     os.makedirs(settings.CHROMA_PATH, exist_ok=True)
     embeddings = OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY)
     vectorstore = Chroma(
@@ -17,12 +23,29 @@ def get_vectorstore():
 
 
 def add_document(text: str, metadata: dict = None):
+    """
+    VectorStore에 텍스트 문서를 추가합니다.
+
+    Args:
+        text (str): 추가할 텍스트 문서
+        metadata (dict, optional): 문서와 함께 저장할 메타데이터 (예: {"source": "README.md"})
+    """
     store = get_vectorstore()
     store.add_texts([text], metadatas=[metadata or {}])
     store.persist()
 
 
 def search_document(query: str, k: int = 3):
+    """
+    유사도 기반으로 VectorStore에서 관련 문서를 검색합니다.
+
+    Args:
+        query (str): 검색할 질문 또는 키워드
+        k (int, optional): 반환할 문서 개수. 기본값은 3개.
+
+    Returns:
+        List[Document]: 유사도가 높은 문서 리스트 (LangChain Document 객체)
+    """
     store = get_vectorstore()
     results = store.similarity_search(query, k=k)
     return results
