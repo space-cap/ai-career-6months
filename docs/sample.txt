@@ -1,58 +1,165 @@
 AI 커리어 전환 6개월 로드맵
 
-이 문서는 IT 또는 비전공자라도 6개월 안에 AI 관련 직무로 전환할 수 있도록 설계된 실습형 로드맵입니다.  
-각 주차별 목표는 실습 중심으로 구성되어 있으며, FastAPI, LangChain, Chroma, MySQL 등 실제 현업에서 사용하는 기술을 단계별로 다룹니다.
+이 문서는 6개월 동안 IT/AI 기반의 커리어를 새롭게 구축하려는 사람들을 위한 실습형 로드맵입니다.  
+비전공자 또는 기존 직무에서 AI 분야로 전환을 꿈꾸는 사람도 따라갈 수 있도록,  
+각 주차별로 목표와 결과물이 명확하게 설정되어 있습니다.
 
 ---
 
-1주차: 환경 세팅
+[Week 1] 개발 환경 세팅과 FastAPI 서버 실행
+
+1주차의 목표는 Python 기반 백엔드 개발 환경을 완전히 세팅하는 것입니다.  
 Python 3.13, Poetry, VSCode 환경을 구성하고 FastAPI 기본 서버를 실행합니다.  
-API 구조, 라우팅, .env 설정, pyproject.toml 구조를 익히는 것이 핵심입니다.
+`.env` 파일을 만들어 API 키와 데이터베이스 설정을 관리합니다.
 
-2주차: LLM 챗봇 API 구축
-OpenAI API를 연결하여 간단한 챗봇을 구현합니다.  
-LangChain의 LLMChain, PromptTemplate을 학습하고 `/api/chat` 엔드포인트를 만듭니다.  
-사용자의 질문에 AI가 직접 응답하도록 FastAPI에서 POST 요청을 처리합니다.
+핵심 개념:
+- Poetry로 패키지 관리 (`pyproject.toml`)
+- FastAPI 기본 구조 (main.py, routers, core/config.py)
+- Git 초기화 및 첫 커밋
 
-3주차: RAG 챗봇 개발
-Chroma VectorStore를 활용하여 문서를 벡터로 저장하고, LangChain의 RetrievalQA로 연결합니다.  
-사용자는 `/api/rag-chat`을 통해 자신이 입력한 문서 내용을 기반으로 질문할 수 있습니다.  
-이때 OpenAIEmbeddings를 이용해 텍스트를 임베딩하고, Chroma DB에 persist합니다.
-
-4주차: 웹 UI 및 배포
-FastAPI 백엔드와 React 기반 프론트를 연결합니다.  
-사용자는 웹 브라우저에서 직접 챗봇과 대화할 수 있으며, Render 또는 AWS를 통해 배포합니다.
-
----
-
-이 프로젝트의 궁극적인 목표는 “AI로 나의 경력을 확장하는 것”입니다.  
-즉, AI가 내 경험과 데이터를 학습하여, 내 전문성을 보완해주는 파트너로 진화하도록 만드는 것입니다.  
-
-FastAPI 실행 명령어 예시:
+FastAPI 실행 명령어:
     poetry run uvicorn app.main:app --reload
 
-Chroma 벡터스토어 기본 경로:
-    ./chroma_db
+이 주차가 끝나면 로컬에서 API 서버가 동작하고, `/docs`에서 Swagger UI를 확인할 수 있습니다.
 
-환경 변수 설정 예시:
-    OPENAI_API_KEY=sk-xxxxxx
-    MYSQL_URL=mysql://root:password@localhost:3306/ai_career
+---
+
+[Week 2] LLM 연결과 첫 챗봇 API 만들기
+
+2주차는 OpenAI API를 연결해 “AI가 직접 대답하는 챗봇”을 만드는 단계입니다.  
+LangChain의 기본 객체인 `PromptTemplate`, `LLMChain`을 사용하여  
+FastAPI에서 `/api/chat` 엔드포인트를 구현합니다.
+
+핵심 개념:
+- OpenAI API Key 등록
+- LangChain 기본 구조 (PromptTemplate → LLMChain → 응답)
+- POST 요청 처리 및 JSON Response
+
+예시 요청:
+{
+  "question": "AI 챗봇을 만들려면 어떤 기술이 필요해?"
+}
+
+예시 응답:
+{
+  "user_input": "AI 챗봇을 만들려면 어떤 기술이 필요해?",
+  "ai_answer": "Python, FastAPI, LangChain, OpenAI API 같은 도구가 필요합니다."
+}
+
+이 주차가 끝나면 AI가 실제로 대답하는 API가 완성됩니다.
+
+---
+
+[Week 3] RAG 챗봇 구축 – 내 데이터로 답하는 AI
+
+3주차는 RAG (Retrieval-Augmented Generation) 구조를 구현하는 주차입니다.  
+Chroma VectorStore를 활용해 문서를 임베딩하고, LangChain의 `RetrievalQA`를 통해  
+문서 내용을 기반으로 답변하는 챗봇을 만듭니다.
+
+핵심 개념:
+- OpenAIEmbeddings를 이용한 텍스트 벡터화
+- Chroma DB 생성 및 persist
+- Retriever + LLM 결합 (QAChain)
+
+Chroma 경로 설정:
     CHROMA_PATH=./chroma_db
 
----
+예시 질문:
+“이 문서에서 FastAPI 실행 명령어가 뭐라고 되어 있어?”
 
-FAQ
-
-Q. FastAPI 서버를 실행하려면 어떤 명령을 사용하나요?  
-A. 터미널에서 `poetry run uvicorn app.main:app --reload` 명령을 실행합니다.
-
-Q. Chroma DB는 어디에 저장되나요?  
-A. `.env` 파일에 지정된 `CHROMA_PATH` 경로에 저장됩니다.
-
-Q. AI가 문서 내용을 이해하려면 어떤 과정이 필요한가요?  
-A. 텍스트를 임베딩하여 벡터 형태로 변환한 후, 유사도 검색을 통해 관련 내용을 찾아 LLM에 제공합니다.
+예시 답변:
+“‘poetry run uvicorn app.main:app --reload’ 명령을 사용하라고 되어 있습니다.”
 
 ---
 
-이 문서는 49세 이후 새로운 커리어를 AI로 확장하려는 사람들을 위한 첫 걸음입니다.  
-6개월 동안 배우는 모든 기술은 "나만의 AI 포트폴리오"로 이어질 것입니다.
+[Week 4] 웹 UI 연결 및 배포
+
+4주차는 백엔드와 프론트엔드를 연결하고, 실제 웹에서 AI 챗봇을 실행하는 주차입니다.  
+React + FastAPI 통신 구조를 이해하고, Render 또는 AWS를 통해 서버를 배포합니다.
+
+핵심 개념:
+- REST API 통신 구조 (Axios, Fetch)
+- CORS 설정
+- Render 배포 절차 (Procfile, requirements.txt)
+- 환경변수 관리 (.env.production)
+
+결과물:
+- 웹 브라우저에서 AI 챗봇과 대화 가능
+- 백엔드 로그를 통해 요청 내역 확인 가능
+
+---
+
+[Week 5] 데이터베이스 & 대화 로그 관리
+
+5주차는 MySQL을 활용해 AI 챗봇의 대화 기록을 저장하고 분석하는 단계입니다.  
+사용자의 질문, AI의 응답, 시간 정보를 테이블에 저장하여  
+후속 모델 학습이나 인사이트 분석에 활용할 수 있습니다.
+
+핵심 개념:
+- MySQL 연동 (SQLAlchemy or aiomysql)
+- 대화 로그 스키마 설계 (conversation_log)
+- CRUD API 구현 (대화 저장, 조회, 삭제)
+- ERD(Entity Relationship Diagram) 이해
+
+SQL 예시:
+CREATE TABLE conversation_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question TEXT,
+    answer TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+이 주차가 끝나면 챗봇이 “대화를 기억하는” 형태로 진화합니다.
+
+---
+
+[Week 6] AI 포트폴리오 완성 & 개인 프로젝트 발표
+
+마지막 주차는 지금까지 배운 기술을 하나의 포트폴리오로 완성하는 단계입니다.  
+실제 구직용으로 제출 가능한 “AI 프로젝트”를 완성하고,  
+Notion, GitHub, README를 정리하여 자신의 커리어를 시각화합니다.
+
+핵심 개념:
+- 프로젝트 README 작성법
+- GitHub Actions로 자동 배포
+- Notion 로드맵 / 포트폴리오 구성
+- 발표용 슬라이드 및 시연 영상 제작
+
+발표 예시 구성:
+1. 문제 정의
+2. 기술 스택
+3. 아키텍처 다이어그램
+4. 시연 영상 링크
+5. 핵심 코드 / 개선 방향
+
+---
+
+[FAQ]
+
+Q1. FastAPI 서버를 실행하려면 어떻게 하나요?  
+A1. `poetry run uvicorn app.main:app --reload` 명령을 실행합니다.
+
+Q2. Chroma DB는 어디에 저장되나요?  
+A2. `.env`에 지정된 `CHROMA_PATH` 경로(`./chroma_db`)에 저장됩니다.
+
+Q3. RAG란 무엇인가요?  
+A3. Retrieval-Augmented Generation의 약자로,  
+AI가 “기억” 대신 “검색”을 통해 더 정확한 답변을 생성하는 방식입니다.
+
+Q4. LLM은 어떤 역할을 하나요?  
+A4. LLM은 언어 모델로, 임베딩된 데이터에서 검색된 정보를 기반으로 자연스러운 답변을 생성합니다.
+
+---
+
+[결론]
+
+6개월 동안의 학습 여정은 단순히 기술을 배우는 것이 아니라,  
+AI를 “직업 전환의 도구”로 활용하는 과정을 의미합니다.  
+
+- 1~2개월: 환경 세팅 + 기본 챗봇 구축  
+- 3~4개월: RAG 구조 + 웹 UI + 배포  
+- 5~6개월: 데이터베이스 + 포트폴리오 완성  
+
+이 과정을 마치면 당신은 “AI로 나의 경력을 확장할 수 있는 실무형 개발자”가 되어 있을 것입니다.
+
+---
