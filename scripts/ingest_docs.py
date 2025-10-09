@@ -69,7 +69,8 @@ def show_help():
 🧠 사용법:
     poetry run python scripts/ingest_docs.py         # 문서 임베딩
     poetry run python scripts/ingest_docs.py --reset # 기존 DB 삭제 후 새로 임베딩
-
+    poetry run python -m scripts.ingest_docs --reset
+    
 옵션:
     --reset    기존 Chroma DB를 완전히 초기화합니다.
     --help     도움말 보기
