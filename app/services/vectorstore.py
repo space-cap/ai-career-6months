@@ -63,4 +63,3 @@ def search_document(query: str, k: int = 3):
     store = get_vectorstore()
     results = store.similarity_search(query, k=k)
     return results
-
