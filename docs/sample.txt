@@ -1,0 +1,58 @@
+AI 커리어 전환 6개월 로드맵
+
+이 문서는 IT 또는 비전공자라도 6개월 안에 AI 관련 직무로 전환할 수 있도록 설계된 실습형 로드맵입니다.  
+각 주차별 목표는 실습 중심으로 구성되어 있으며, FastAPI, LangChain, Chroma, MySQL 등 실제 현업에서 사용하는 기술을 단계별로 다룹니다.
+
+---
+
+1주차: 환경 세팅
+Python 3.13, Poetry, VSCode 환경을 구성하고 FastAPI 기본 서버를 실행합니다.  
+API 구조, 라우팅, .env 설정, pyproject.toml 구조를 익히는 것이 핵심입니다.
+
+2주차: LLM 챗봇 API 구축
+OpenAI API를 연결하여 간단한 챗봇을 구현합니다.  
+LangChain의 LLMChain, PromptTemplate을 학습하고 `/api/chat` 엔드포인트를 만듭니다.  
+사용자의 질문에 AI가 직접 응답하도록 FastAPI에서 POST 요청을 처리합니다.
+
+3주차: RAG 챗봇 개발
+Chroma VectorStore를 활용하여 문서를 벡터로 저장하고, LangChain의 RetrievalQA로 연결합니다.  
+사용자는 `/api/rag-chat`을 통해 자신이 입력한 문서 내용을 기반으로 질문할 수 있습니다.  
+이때 OpenAIEmbeddings를 이용해 텍스트를 임베딩하고, Chroma DB에 persist합니다.
+
+4주차: 웹 UI 및 배포
+FastAPI 백엔드와 React 기반 프론트를 연결합니다.  
+사용자는 웹 브라우저에서 직접 챗봇과 대화할 수 있으며, Render 또는 AWS를 통해 배포합니다.
+
+---
+
+이 프로젝트의 궁극적인 목표는 “AI로 나의 경력을 확장하는 것”입니다.  
+즉, AI가 내 경험과 데이터를 학습하여, 내 전문성을 보완해주는 파트너로 진화하도록 만드는 것입니다.  
+
+FastAPI 실행 명령어 예시:
+    poetry run uvicorn app.main:app --reload
+
+Chroma 벡터스토어 기본 경로:
+    ./chroma_db
+
+환경 변수 설정 예시:
+    OPENAI_API_KEY=sk-xxxxxx
+    MYSQL_URL=mysql://root:password@localhost:3306/ai_career
+    CHROMA_PATH=./chroma_db
+
+---
+
+FAQ
+
+Q. FastAPI 서버를 실행하려면 어떤 명령을 사용하나요?  
+A. 터미널에서 `poetry run uvicorn app.main:app --reload` 명령을 실행합니다.
+
+Q. Chroma DB는 어디에 저장되나요?  
+A. `.env` 파일에 지정된 `CHROMA_PATH` 경로에 저장됩니다.
+
+Q. AI가 문서 내용을 이해하려면 어떤 과정이 필요한가요?  
+A. 텍스트를 임베딩하여 벡터 형태로 변환한 후, 유사도 검색을 통해 관련 내용을 찾아 LLM에 제공합니다.
+
+---
+
+이 문서는 49세 이후 새로운 커리어를 AI로 확장하려는 사람들을 위한 첫 걸음입니다.  
+6개월 동안 배우는 모든 기술은 "나만의 AI 포트폴리오"로 이어질 것입니다.
