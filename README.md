@@ -1,12 +1,12 @@
 ![AI Career 6 Months Banner](docs/banner_1.png)
 
 # 🚀 AI Career 6 Months
-> 49세, 나의 커리어를 AI로 다시 세운 6개월의 기록
+> 나의 커리어를 AI로 다시 세운 6개월의 기록
 
 ---
 
 ### 🧠 Overview
-**AI Career 6 Months**는 49세 개발자가 6개월 동안  
+**AI Career 6 Months**는 개발자가 6개월 동안  
 AI 기술을 실무 수준으로 익히고 **AI 챗봇 / 자동화 / RAG 기반 서비스 개발자**로 전환하기 위한  
 자기주도형 커리어 전환 프로젝트입니다.
 
@@ -74,7 +74,7 @@ ai-career-6months/
 
 ## 🧭 Links
 
-* 📗 **Notion Roadmap:** [49세 AI 커리어 전환 6개월 로드맵](#)
+* 📗 **Notion Roadmap:** [AI 커리어 전환 6개월 로드맵](#)
 * 💻 **Demo Site:** (추가 예정)
 * 🧾 **Portfolio Blog:** (추가 예정)
 * 📬 **Contact:** (email 또는 LinkedIn)
