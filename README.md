@@ -1,4 +1,4 @@
-![AI Career 6 Months Banner](docs/banner.png)
+![AI Career 6 Months Banner](docs/banner_1.png)
 
 # 🚀 AI Career 6 Months
 > 49세, 나의 커리어를 AI로 다시 세운 6개월의 기록
