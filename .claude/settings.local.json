@@ -6,7 +6,8 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nAI 커리어 6개월 로드맵 문서 업데이트\n\n- 주차별 학습 목표 상세 설명 추가\n- Week 1~6까지 구체적인 실습 내용 및 핵심 개념 명시\n- FAQ 섹션 확장 및 결론 추가\n- 6개월 전체 로드맵 시각화 개선\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git commit -m \"$(cat <<''EOF''\n문서 자동 임베딩 스크립트 추가\n\n- scripts/ingest_docs.py: docs 폴더의 txt 파일을 자동으로 Chroma VectorStore에 임베딩\n- 실행 명령: poetry run python scripts/ingest_docs.py\n- 메타데이터(source)와 함께 문서 저장\n- 처리 진행 상황 및 오류 처리 로깅 포함\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git commit:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
