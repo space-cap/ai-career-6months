@@ -47,6 +47,28 @@ pytest
 pytest -v
 ```
 
+## Git Commit Guidelines
+
+**모든 커밋 메시지는 한글로 작성합니다.**
+
+커밋 메시지 형식:
+- 제목: 변경 사항을 간결하게 설명 (한글)
+- 본문: 상세한 변경 내역을 불릿 포인트로 나열 (한글)
+- 푸터: Claude Code 서명 자동 추가
+
+예시:
+```
+문서 임베딩 API 엔드포인트 추가
+
+- app/routers/ingest.py: POST /api/ingest 엔드포인트 구현
+- app/services/ingest_service.py: 문서 임베딩 서비스 로직 분리
+- app/main.py: CORS 미들웨어 추가 및 ingest 라우터 등록
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
 ## Architecture
 
 ### Core Structure
