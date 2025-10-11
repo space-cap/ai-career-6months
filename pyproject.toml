@@ -38,7 +38,8 @@ dependencies = [
   "langchain-community (>=0.3.31,<0.4.0)",
   "langchain-chroma (>=0.2.6,<0.3.0)",
   "langchain-openai (>=0.3.35,<0.4.0)",
-  "pymysql (>=1.1.2,<2.0.0)"
+  "pymysql (>=1.1.2,<2.0.0)",
+  "cryptography (>=46.0.2,<47.0.0)"
 ]
 
 [project.optional-dependencies]

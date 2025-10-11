@@ -8,8 +8,14 @@ function App() {
   const [logs, setLogs] = useState([]);
 
   const fetchLogs = async () => {
-    const res = await axios.get("/api/conversation/logs?limit=5");
-    setLogs(res.data);
+    try {
+      const res = await axios.get("/api/conversation/logs?limit=5");
+      setLogs(res.data);
+      console.log("로그 조회 성공:", res.data);
+    } catch (err) {
+      console.error("로그 조회 실패:", err);
+      alert("로그를 불러올 수 없습니다: " + err.message);
+    }
   };
 
   const sendMessage = async () => {
