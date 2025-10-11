@@ -51,18 +51,25 @@ function App() {
           {answer && <p>{answer}</p>}
         </div>
       </div>
-      <div>
-      <button onClick={fetchLogs}>🧾 대화 기록 보기</button>
-      <ul>
-        {logs.map((log) => (
-          <li key={log.id}>
-            <strong>Q:</strong> {log.question}<br/>
-            <strong>A:</strong> {log.answer}<br/>
-            <small>{new Date(log.created_at).toLocaleString()}</small>
-          </li>
-        ))}
-      </ul>
-    </div>
+      <div className="w-full max-w-lg bg-white p-4 rounded-xl shadow-md mt-4">
+        <button
+          onClick={fetchLogs}
+          className="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
+        >
+          🧾 대화 기록 보기
+        </button>
+        <ul className="mt-4 space-y-2">
+          {logs.map((log) => (
+            <li key={log.id} className="border-b pb-2">
+              <strong>Q:</strong> {log.question}<br/>
+              <strong>A:</strong> {log.answer}<br/>
+              <small className="text-gray-500">
+                {new Date(log.created_at).toLocaleString()}
+              </small>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
     
   );
