@@ -5,6 +5,12 @@ function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
+  const [logs, setLogs] = useState([]);
+
+  const fetchLogs = async () => {
+    const res = await axios.get("/api/conversation/logs?limit=5");
+    setLogs(res.data);
+  };
 
   const sendMessage = async () => {
     if (!question.trim()) return;
@@ -45,7 +51,20 @@ function App() {
           {answer && <p>{answer}</p>}
         </div>
       </div>
+      <div>
+      <button onClick={fetchLogs}>🧾 대화 기록 보기</button>
+      <ul>
+        {logs.map((log) => (
+          <li key={log.id}>
+            <strong>Q:</strong> {log.question}<br/>
+            <strong>A:</strong> {log.answer}<br/>
+            <small>{new Date(log.created_at).toLocaleString()}</small>
+          </li>
+        ))}
+      </ul>
     </div>
+    </div>
+    
   );
 }
 

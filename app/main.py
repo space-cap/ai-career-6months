@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import chat, ingest
+from app.routers import chat, ingest, rag_chat, conversation
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -19,7 +19,9 @@ app.add_middleware(
 
 # 라우터 등록
 app.include_router(chat.router, prefix="/api", tags=["chat"])
+app.include_router(rag_chat.router, prefix="/api", tags=["rag_chat"])
 app.include_router(ingest.router, prefix="/api", tags=["ingest"])
+app.include_router(conversation.router, prefix="/api", tags=["conversation"])
 
 
 @app.get("/")
