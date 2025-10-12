@@ -54,3 +54,18 @@ build/
 tmp/
 temp/
 *.tmp
+
+# Frontend (Node.js / React / Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env.local
+frontend/.env.production
+frontend/.env.development
+
+# Claude Code
+.claude/settings.local.json
+
+# Alembic 마이그레이션 캐시
+alembic/__pycache__/
+alembic/versions/__pycache__/

@@ -9,4 +9,6 @@ class ConversationLog(Base):
     user_id = Column(String(50), nullable=True)
     question = Column(Text, nullable=False)
     answer = Column(Text, nullable=False)
+    sentiment = Column(String(20), nullable=True)  # ✅ 감정 결과
+    topic = Column(String(100), nullable=True)     # ✅ 주제 결과
     created_at = Column(DateTime(timezone=True), server_default=func.now())
