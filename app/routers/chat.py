@@ -28,6 +28,3 @@ class ChatRequest(BaseModel):
 async def chat(request: ChatRequest):
     answer = get_ai_response(request.question)
     return {"user_input": request.question, "ai_answer": answer}
-
-
-
