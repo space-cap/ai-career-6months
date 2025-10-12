@@ -25,7 +25,11 @@ function App() {
     setAnswer("생각 중... 🤔");
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/rag-chat", {
+      const endpoint = mode === "personal"
+        ? "http://127.0.0.1:8000/api/personal-chat"
+        : "http://127.0.0.1:8000/api/rag-chat";
+
+      const res = await axios.post(endpoint, {
         question,
       });
       setAnswer(res.data.answer);
