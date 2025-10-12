@@ -9,7 +9,7 @@ function App() {
 
   const fetchLogs = async () => {
     try {
-      const res = await axios.get("/api/conversation/logs?limit=5");
+      const res = await axios.get("http://127.0.0.1:8000/api/conversation/logs?limit=5");
       setLogs(res.data);
       console.log("로그 조회 성공:", res.data);
     } catch (err) {
