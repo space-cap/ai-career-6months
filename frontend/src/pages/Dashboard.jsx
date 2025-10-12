@@ -13,15 +13,17 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">📊 나의 대화 데이터</h2>
-      <LineChart width={600} height={300} data={stats}>
-        <XAxis dataKey="date" />
-        <YAxis />
-        <CartesianGrid stroke="#ccc" />
-        <Line type="monotone" dataKey="count" stroke="#3b82f6" />
-        <Tooltip />
-      </LineChart>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
+        <h2 className="text-3xl font-bold mb-6 text-gray-700">📊 나의 대화 데이터</h2>
+        <LineChart width={600} height={300} data={stats}>
+          <XAxis dataKey="date" />
+          <YAxis />
+          <CartesianGrid stroke="#ccc" />
+          <Line type="monotone" dataKey="count" stroke="#3b82f6" />
+          <Tooltip />
+        </LineChart>
+      </div>
     </div>
   );
 }
