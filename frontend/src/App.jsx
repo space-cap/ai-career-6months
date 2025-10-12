@@ -6,6 +6,7 @@ function App() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
+  const [mode, setMode] = useState("normal");
 
   const fetchLogs = async () => {
     try {
@@ -39,6 +40,12 @@ function App() {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
       <h1 className="text-3xl font-bold mb-4 text-gray-700">💬 AI Career Chatbot</h1>
       <div className="w-full max-w-lg bg-white p-4 rounded-xl shadow-md">
+        <label>
+          <input
+            type="checkbox"
+            onChange={(e) => setMode(e.target.checked ? "personal" : "normal")}
+          /> 개인화 모드
+        </label>
         <textarea
           rows={3}
           className="w-full border p-3 rounded-md"
@@ -53,6 +60,7 @@ function App() {
         >
           {loading ? "전송 중..." : "질문 보내기"}
         </button>
+        {mode === "personal" && <p>🤖 개인화 모드 ON</p>}
         <div className="mt-4 bg-gray-50 p-3 rounded-md min-h-[100px] text-gray-800">
           {answer && <p>{answer}</p>}
         </div>
