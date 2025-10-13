@@ -16,6 +16,12 @@ function Navigation() {
         >
           📊 대시보드
         </Link>
+        <Link
+          to="/trend"
+          className="text-white hover:text-blue-200 font-semibold transition"
+        >
+          📊 감정 트렌드
+        </Link>
       </div>
     </nav>
   );

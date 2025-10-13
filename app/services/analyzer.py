@@ -12,9 +12,19 @@ llm = ChatOpenAI(
 
 def analyze_sentiment(text):
     """문장의 감정을 분석 ('긍정', '중립', '부정')"""
-    prompt = f"다음 문장의 감정을 '긍정', '중립', '부정' 중 하나로 분류해줘:\n{text}"
+    prompt = f"다음 문장의 감정을 '긍정', '중립', '부정' 중 정확히 하나의 단어로만 답변해:\n{text}"
     response = llm.invoke(prompt)
-    return response.content.strip()
+    result = response.content.strip()
+
+    # 정규화: LLM 응답을 표준 형식으로 변환
+    if "긍정" in result or "positive" in result.lower():
+        return "긍정"
+    elif "부정" in result or "negative" in result.lower():
+        return "부정"
+    elif "중립" in result or "neutral" in result.lower():
+        return "중립"
+    else:
+        return "중립"  # 기본값
 
 
 def extract_topic(text: str) -> str:
