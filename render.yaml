@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: ai-career-6months
+    env: python
+    plan: free
+    buildCommand: |
+      cd frontend && npm install && npm run build && cd ..
+      poetry install
+    startCommand: poetry run uvicorn app.main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false

@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from app.routers import chat, ingest, rag_chat, conversation, personal_chat, insights
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
+from app.database import get_db
+from app.core.config import settings
 
 app = FastAPI(
     title="AI Career 6 Months",
@@ -27,9 +30,15 @@ app.include_router(personal_chat.router, prefix="/api", tags=["personal_chat"])
 app.include_router(insights.router, prefix="/api", tags=["insights"])
 
 
+@app.get("/api/health")
+def health_check(db=Depends(get_db)):
+    result = db.execute(text("SELECT NOW()")).fetchone()
+    return {"status": "ok", "db_time": str(result[0]), "openai_key": bool(settings.OPENAI_API_KEY)}
+
+
 # @app.get("/")
 # def root():
 #    return {"message": "🚀 AI Career 6 Months API is running!"}
 
-# ✅ Vite 빌드된 React 파일 연결
+# ✅ Vite 빌드된 React 파일 연결 (맨 마지막에 마운트)
 app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
