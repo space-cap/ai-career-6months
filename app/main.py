@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.routers import chat, ingest, rag_chat, conversation, personal_chat, insights
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
     title="AI Career 6 Months",
@@ -26,6 +27,9 @@ app.include_router(personal_chat.router, prefix="/api", tags=["personal_chat"])
 app.include_router(insights.router, prefix="/api", tags=["insights"])
 
 
-@app.get("/")
-def root():
-    return {"message": "🚀 AI Career 6 Months API is running!"}
+# @app.get("/")
+# def root():
+#    return {"message": "🚀 AI Career 6 Months API is running!"}
+
+# ✅ Vite 빌드된 React 파일 연결
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
