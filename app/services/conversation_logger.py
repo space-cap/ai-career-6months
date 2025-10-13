@@ -5,7 +5,7 @@ from app.database import SessionLocal
 from app.models.conversation_log import ConversationLog
 
 
-def save_conversation(question: str, answer: str, user_id: str = "guest"):
+def save_conversation(question: str, answer: str, sentiment: str, topic: str, user_id: str = "guest"):
     """
     대화 내용을 데이터베이스에 저장합니다.
 
@@ -19,7 +19,9 @@ def save_conversation(question: str, answer: str, user_id: str = "guest"):
         log = ConversationLog(
             user_id=user_id,
             question=question,
-            answer=answer
+            answer=answer,
+            sentiment=sentiment,
+            topic=topic
         )
         db.add(log)
         db.commit()
