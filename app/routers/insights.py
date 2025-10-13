@@ -26,6 +26,7 @@ def get_topics():
     db = SessionLocal()
     results = (
         db.query(ConversationLog.topic, func.count().label("count"))
+        .filter(ConversationLog.topic.isnot(None))  # NULL 제외
         .group_by(ConversationLog.topic)
         .order_by(func.count().desc())
         .limit(10)
