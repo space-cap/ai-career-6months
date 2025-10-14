@@ -1,12 +1,16 @@
 services:
   - type: web
     name: ai-career-6months
-    env: python
+    runtime: python
     plan: free
+    region: oregon
     buildCommand: |
-      cd frontend && npm install && npm run build && cd ..
+      cd frontend
+      npm install
+      npm run build
+      cd ..
       poetry install
-    startCommand: poetry run uvicorn app.main:app --host 0.0.0.0 --port 10000
+    startCommand: poetry run uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: ENV
         value: production
@@ -14,3 +18,5 @@ services:
         sync: false
       - key: OPENAI_API_KEY
         sync: false
+      - key: CHROMA_PATH
+        value: ./chroma_db
