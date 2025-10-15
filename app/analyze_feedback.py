@@ -30,14 +30,14 @@ df = pd.read_sql("SELECT * FROM conversation_log", engine)
 
 # 감정 비율
 sentiment_counts = df["sentiment"].value_counts(normalize=True)
-plt.figure(figsize=(6,4))
+plt.figure(figsize=(6, 4))
 sentiment_counts.plot(kind="bar", title="Sentiment Ratio")
 plt.tight_layout()
 plt.savefig(os.path.join(REPORT_DIR, "sentiment_ratio.png"))
 
 # 주제 Top 10
 topic_counts = df["topic"].value_counts().head(10)
-plt.figure(figsize=(6,4))
+plt.figure(figsize=(6, 4))
 topic_counts.plot(kind="bar", title="Top Topics")
 plt.tight_layout()
 plt.savefig(os.path.join(REPORT_DIR, "top_topics.png"))
