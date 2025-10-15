@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from app.database import get_db
 from app.core.config import settings
+from app.routers import report
 
 app = FastAPI(
     title="AI Career 6 Months",
@@ -28,6 +29,7 @@ app.include_router(ingest.router, prefix="/api", tags=["ingest"])
 app.include_router(conversation.router, prefix="/api", tags=["conversation"])
 app.include_router(personal_chat.router, prefix="/api", tags=["personal_chat"])
 app.include_router(insights.router, prefix="/api", tags=["insights"])
+app.include_router(report.router)
 
 
 @app.get("/api/health")
