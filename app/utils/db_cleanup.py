@@ -25,6 +25,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from dotenv import load_dotenv
+from app.utils.slack_notifier import send_slack_message  # ✅ 공용 모듈 import
 
 # .env 파일에서 환경변수 로드
 load_dotenv()
@@ -118,6 +119,17 @@ def backup_and_cleanup_logs() -> None:
             print(f"❌ Failed to delete logs from database: {e}")
             print(f"⚠️  Note: Backup file was created at {backup_path}")
             raise
+
+        msg = (
+            f"💾 *DB Cleanup Report*\n"
+            f"- 파일: `{backup_filename}`\n"
+            f"- 백업 수: {len(df)} rows\n"
+            f"- 기준일: {cutoff_date.date()}\n"
+            f"- 실행: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}"
+        )
+
+        send_slack_message(msg, backup_path)
+        print("✅ 백업 및 Slack 전송 완료.")
 
     except Exception as e:
         print(f"❌ Error during backup and cleanup: {e}")
