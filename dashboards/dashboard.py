@@ -158,7 +158,7 @@ with tab3:
 
                 # 평가 데이터 테이블
                 st.subheader("📋 상세 평가 내역")
-                display_cols = ["log_id"] + available_cols + (["comment"] if "comment" in eval_df.columns else [])
+                display_cols = ["conversation_id"] + available_cols + (["comment"] if "comment" in eval_df.columns else [])
                 st.dataframe(eval_df[display_cols])
 
     except SQLAlchemyError as e:
