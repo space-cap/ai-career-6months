@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
-    
+
     OPENAI_API_KEY: str
     DATABASE_URL: str = "mysql://root:doolman@localhost:3306/ai_career"
     CHROMA_PATH: str = "./chroma_db"
@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     SLACK_WEBHOOK_URL: str | None = None
     SLACK_BOT_TOKEN: str | None = None
     SLACK_CHANNEL: str | None = None
+
+    # 로그 보관 기간 (일)
+    LOG_RETENTION_DAYS: int = 30
 
 
 settings = Settings()
