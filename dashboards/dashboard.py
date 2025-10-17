@@ -40,7 +40,7 @@ st.title("🤖 AI Operations Dashboard")
 st.markdown("---")
 
 # Tabs
-tab1, tab2, tab3 = st.tabs(["📊 Overview", "💬 Sentiment Trends", "🧠 Evaluation Metrics"])
+tab1, tab2, tab3, tab4 = st.tabs(["📊 Overview", "💬 Sentiment Trends", "🧠 Evaluation Metrics", "🗳️ Feedback Analysis"])
 
 # ------------------------------
 # 1️⃣ Overview
@@ -168,3 +168,45 @@ with tab3:
         st.error(f"필수 컬럼이 없습니다: {e}")
     except Exception as e:
         st.error(f"예상치 못한 오류가 발생했습니다: {e}")
+
+# ------------------------------
+# 4️⃣ Feedback Analysis
+# ------------------------------
+with tab4:
+    st.header("사용자 피드백 분석")
+
+    try:
+        feedback_df = pd.read_sql("SELECT * FROM feedback_log", engine)
+
+        if feedback_df.empty:
+            st.info("아직 피드백 데이터가 없습니다.")
+        else:
+            # 피드백 요약 통계
+            total_feedback = len(feedback_df)
+            likes = len(feedback_df[feedback_df["feedback"] == "like"])
+            dislikes = len(feedback_df[feedback_df["feedback"] == "dislike"])
+            dislike_ratio = (dislikes / total_feedback * 100) if total_feedback > 0 else 0
+
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("총 피드백", total_feedback)
+            col2.metric("👍 좋아요", likes)
+            col3.metric("👎 싫어요", dislikes)
+            col4.metric("부정 비율", f"{dislike_ratio:.1f}%")
+
+            # 피드백 분포 차트
+            st.subheader("📊 피드백 분포")
+            feedback_counts = feedback_df["feedback"].value_counts()
+            st.bar_chart(feedback_counts)
+
+            # 최근 피드백 내역
+            st.subheader("📋 최근 피드백")
+            recent_feedback = feedback_df.sort_values("created_at", ascending=False).head(10)
+            display_cols = ["conversation_id", "feedback", "reason", "created_at"]
+            available_cols = [col for col in display_cols if col in recent_feedback.columns]
+            st.dataframe(recent_feedback[available_cols])
+
+    except SQLAlchemyError as e:
+        st.error(f"데이터베이스 조회 중 오류가 발생했습니다: {e}")
+        st.info("💡 Tip: feedback_log 테이블이 존재하는지 확인하세요.")
+    except Exception as e:
+        st.error(f"피드백 분석 중 오류가 발생했습니다: {e}")
