@@ -3,7 +3,6 @@ services:
     name: ai-career-6months
     runtime: python
     plan: free
-    region: oregon
     buildCommand: |
       cd frontend
       npm install
@@ -20,10 +19,27 @@ services:
         sync: false
       - key: CHROMA_PATH
         value: ./chroma_db
+      - key: SLACK_BOT_TOKEN
+        sync: false
+      - key: SLACK_CHANNEL
+        value: ai-reports
+      - key: LOG_RETENTION_DAYS
+        value: 30
 
   - type: web
     name: ai-dashboard
-    env: python
+    runtime: python
+    plan: free
     buildCommand: poetry install
     startCommand: poetry run streamlit run dashboards/dashboard.py --server.port 10001 --server.address 0.0.0.0
-    
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SLACK_BOT_TOKEN
+        sync: false
+      - key: SLACK_CHANNEL
+        value: ai-reports
+      - key: LOG_RETENTION_DAYS
+        value: 30
