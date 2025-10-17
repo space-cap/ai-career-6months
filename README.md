@@ -48,16 +48,66 @@ ai-career-6months/
 ├── app/                  # FastAPI application
 │   ├── main.py            # Entry point
 │   ├── routers/           # API routers
-│   └── shared/            # Vectorstore, config modules
+│   ├── services/          # Business logic
+│   └── utils/             # Utilities
 │
 ├── frontend/              # React + Vite UI
 │   ├── src/
 │   └── package.json
 │
+├── dashboards/            # Streamlit analytics dashboard
+│   └── dashboard.py
+│
+├── scripts/               # Automation scripts
+│   ├── ingest_docs.py
+│   ├── retrain_vectorstore.py
+│   └── feedback_loop.py
+│
 ├── notebooks/             # Experiment & learning notebooks
 ├── docs/                  # Design diagrams & references
 ├── README.md
-└── requirements.txt
+└── pyproject.toml
+```
+
+---
+
+## 🖥️ How to Run
+
+### 1. FastAPI Backend Server
+
+```bash
+# Install dependencies
+pip install -e .
+
+# Run development server
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+서버 실행 후:
+- API 문서: http://localhost:8000/docs
+- 헬스 체크: http://localhost:8000/api/health
+
+### 2. Streamlit Analytics Dashboard
+
+```bash
+# Run Streamlit dashboard
+streamlit run dashboards/dashboard.py
+```
+
+대시보드 실행 후:
+- URL: http://localhost:8501
+- 4개 탭: Overview, Sentiment Trends, Evaluation Metrics, Feedback Analysis
+
+### 3. Environment Variables
+
+Create `.env` file:
+```env
+OPENAI_API_KEY=your_openai_key
+DATABASE_URL=postgresql://user:password@host:5432/dbname
+CHROMA_PATH=./chroma_db
+SLACK_BOT_TOKEN=your_slack_token  # Optional
+SLACK_CHANNEL=ai-reports           # Optional
+```
 
 ---
 
