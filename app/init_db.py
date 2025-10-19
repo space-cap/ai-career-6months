@@ -22,6 +22,7 @@ from app.database import Base
 
 # ✅ 모델을 명시적으로 import해야 SQLAlchemy가 테이블 구조를 인식합니다
 from app.models.conversation_log import ConversationLog  # noqa: F401
+from app.models.feedback_log import FeedbackLog  # noqa: F401
 
 # ------------------------------------------
 # 1️⃣ 환경 변수 로드 (.env.local 또는 .env.prod)
