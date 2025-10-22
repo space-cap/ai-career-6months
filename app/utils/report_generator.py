@@ -177,16 +177,19 @@ def generate_weekly_report(days: int = 7) -> dict:
         # 리포트 디렉토리 생성
         REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
-        # 날짜 계산
+        # 날짜 계산 (timezone-aware)
         end_date_obj = datetime.now()
         start_date_obj = end_date_obj - timedelta(days=days)
-        start_date = start_date_obj.strftime("%Y-%m-%d")
-        end_date = end_date_obj.strftime("%Y-%m-%d")
+        start_date = start_date_obj
+        end_date = end_date_obj
 
-        report_filename = f"weekly_report_{end_date}.pdf"
+        # 리포트 파일명용 문자열
+        end_date_str = end_date_obj.strftime("%Y-%m-%d")
+
+        report_filename = f"weekly_report_{end_date_str}.pdf"
         report_path = REPORT_DIR / report_filename
 
-        logger.info(f"리포트 생성 시작: {start_date} ~ {end_date}")
+        logger.info(f"리포트 생성 시작: {start_date_obj.strftime('%Y-%m-%d')} ~ {end_date_str}")
 
         # 데이터 수집
         with engine.begin() as conn:
@@ -213,7 +216,7 @@ def generate_weekly_report(days: int = 7) -> dict:
             )
 
             # 기간
-            period_text = f"Period: {start_date} ~ {end_date}"
+            period_text = f"Period: {start_date_obj.strftime('%Y-%m-%d')} ~ {end_date_str}"
             ax.text(0.5, 0.90, period_text, ha="center", va="top", fontsize=12)
 
             # 통계 정보
@@ -280,8 +283,8 @@ def generate_weekly_report(days: int = 7) -> dict:
         return {
             "status": "success",
             "report_path": str(report_path),
-            "start_date": start_date,
-            "end_date": end_date,
+            "start_date": start_date_obj.strftime("%Y-%m-%d"),
+            "end_date": end_date_str,
             "stats": {
                 "conversations": conv_count,
                 "sentiment": sentiment_stats,
