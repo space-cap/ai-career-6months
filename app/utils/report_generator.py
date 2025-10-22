@@ -85,7 +85,7 @@ def get_conversation_count(conn, start_date: str, end_date: str) -> int:
     try:
         result = conn.execute(
             text("""
-            SELECT COUNT(*) FROM response_log
+            SELECT COUNT(*) FROM conversation_log
             WHERE created_at BETWEEN :start AND :end
         """),
             {"start": start_date, "end": end_date},
@@ -96,9 +96,9 @@ def get_conversation_count(conn, start_date: str, end_date: str) -> int:
         return 0
 
 
-def get_avg_response_time(conn, start_date: str, end_date: str) -> float:
+def get_sentiment_stats(conn, start_date: str, end_date: str) -> dict:
     """
-    평균 응답 시간 조회
+    감정 분석 통계 조회
 
     Args:
         conn: DB 연결 객체
@@ -106,20 +106,29 @@ def get_avg_response_time(conn, start_date: str, end_date: str) -> float:
         end_date: 종료 날짜
 
     Returns:
-        float: 평균 응답 시간 (초)
+        dict: 감정 통계 딕셔너리
     """
     try:
         result = conn.execute(
             text("""
-            SELECT AVG(response_time) FROM response_log
+            SELECT
+              COUNT(*) as total,
+              SUM(CASE WHEN sentiment IS NOT NULL THEN 1 ELSE 0 END) as analyzed
+            FROM conversation_log
             WHERE created_at BETWEEN :start AND :end
         """),
             {"start": start_date, "end": end_date},
-        ).scalar()
-        return float(result or 0.0)
+        ).fetchone()
+
+        if result:
+            return {
+                "total": int(result.total or 0),
+                "analyzed": int(result.analyzed or 0),
+            }
+        return {"total": 0, "analyzed": 0}
     except Exception as e:
-        logger.error(f"평균 응답 시간 조회 실패: {e}")
-        return 0.0
+        logger.error(f"감정 통계 조회 실패: {e}")
+        return {"total": 0, "analyzed": 0}
 
 
 def create_feedback_chart(feedback_stats: dict) -> BytesIO:
@@ -183,7 +192,7 @@ def generate_weekly_report(days: int = 7) -> dict:
         with engine.begin() as conn:
             feedback_stats = get_feedback_stats(conn, start_date, end_date)
             conv_count = get_conversation_count(conn, start_date, end_date)
-            avg_response_time = get_avg_response_time(conn, start_date, end_date)
+            sentiment_stats = get_sentiment_stats(conn, start_date, end_date)
 
         # PDF 생성
         with PdfPages(str(report_path)) as pdf:
@@ -213,7 +222,7 @@ def generate_weekly_report(days: int = 7) -> dict:
 
             stats_data = [
                 ("Total Conversations", conv_count),
-                ("Average Response Time", f"{avg_response_time:.2f} sec"),
+                ("Sentiment Analyzed", f"{sentiment_stats['analyzed']}/{sentiment_stats['total']}"),
                 ("Total Feedback", feedback_stats["total"]),
                 ("Likes", feedback_stats["likes"]),
                 ("Dislikes", feedback_stats["dislikes"]),
@@ -275,7 +284,7 @@ def generate_weekly_report(days: int = 7) -> dict:
             "end_date": end_date,
             "stats": {
                 "conversations": conv_count,
-                "avg_response_time": avg_response_time,
+                "sentiment": sentiment_stats,
                 "feedback": feedback_stats,
             },
         }
