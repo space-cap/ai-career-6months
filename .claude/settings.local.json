@@ -10,7 +10,14 @@
       "Bash(git push:*)",
       "Bash(poetry add:*)",
       "WebSearch",
-      "WebFetch(domain:render.com)"
+      "WebFetch(domain:render.com)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(cat:*)",
+      "Bash(git rm:*)",
+      "Bash(black:*)",
+      "Bash(flake8:*)",
+      "Bash(python:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

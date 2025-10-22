@@ -9,7 +9,6 @@ import logging
 import signal
 import sys
 import time
-from datetime import datetime
 from pathlib import Path
 
 import schedule
