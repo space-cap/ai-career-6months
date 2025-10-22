@@ -16,5 +16,10 @@ class Settings(BaseSettings):
     # 로그 보관 기간 (일)
     LOG_RETENTION_DAYS: int = 30
 
+    # 스케줄러 설정
+    MONITOR_INTERVAL_MINUTES: int = 30  # 서버 모니터링 주기 (분)
+    BACKUP_TIME: str = "00:00"  # 백업 실행 시간 (HH:MM)
+    BACKUP_RETENTION_DAYS: int = 7  # 백업 보관 기간 (일)
+
 
 settings = Settings()
