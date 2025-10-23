@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     SLACK_WEBHOOK_URL: str | None = None
     SLACK_BOT_TOKEN: str | None = None
     SLACK_CHANNEL: str | None = None
+    SLACK_VERIFICATION_TOKEN: str | None = None  # Slack Slash Command 검증 토큰
 
     # 로그 보관 기간 (일)
     LOG_RETENTION_DAYS: int = 30

@@ -1,0 +1,166 @@
+flowchart TB
+    %% ========================================
+    %% AI Career 6 Months - System Architecture
+    %% ========================================
+
+    subgraph "사용자 인터페이스"
+        User[👤 사용자]
+        SlackUser[💬 Slack 사용자]
+        WebUI[🌐 React Frontend]
+    end
+
+    subgraph "FastAPI Backend"
+        direction TB
+
+        subgraph "API 라우터"
+            ChatAPI["/api/chat<br/>기본 채팅"]
+            RAGChatAPI["/api/rag-chat<br/>RAG 채팅"]
+            PersonalAPI["/api/personal-chat<br/>개인화 채팅"]
+            IngestAPI["/api/ingest<br/>문서 임베딩"]
+            FeedbackAPI["/api/feedback<br/>피드백 수집"]
+            InsightsAPI["/api/insights<br/>분석 결과"]
+            ReportAPI["/api/report<br/>리포트 생성"]
+            SlackCmdAPI["/slack/ai-report<br/>Slack 명령"]
+        end
+
+        subgraph "핵심 서비스"
+            LLMService[LLM Service<br/>OpenAI GPT-4]
+            RAGService[RAG Service<br/>검색 증강 생성]
+            Retriever[Retriever<br/>시맨틱 검색]
+            Personalizer[Personalizer<br/>사용자 맞춤화]
+            IngestService[Ingest Service<br/>문서 처리]
+            Analyzer[Analyzer<br/>감정/주제 분석]
+            ConvLogger[Conversation Logger<br/>대화 기록]
+        end
+
+        subgraph "유틸리티"
+            ReportGen[Report Generator<br/>PDF 생성]
+            SlackUploader[Slack Uploader<br/>파일 업로드]
+            BackupMgr[Backup Manager<br/>DB 백업]
+            Monitor[System Monitor<br/>리소스 모니터링]
+        end
+    end
+
+    subgraph "데이터 저장소"
+        VectorDB[(Chroma VectorDB<br/>문서 임베딩)]
+        PostgreSQL[(PostgreSQL<br/>Neon DB)]
+
+        subgraph "DB 테이블"
+            ConvLog[conversation_log<br/>대화 내역]
+            FeedbackLog[feedback_log<br/>피드백]
+        end
+    end
+
+    subgraph "외부 서비스"
+        OpenAI[OpenAI API<br/>GPT-4 / Embeddings]
+        Slack[Slack<br/>알림 & 파일 업로드]
+    end
+
+    subgraph "분석 & 운영"
+        Dashboard[📊 Streamlit Dashboard<br/>실시간 분석]
+        Scheduler[⏰ Scheduler<br/>자동화 작업]
+        Reports[📄 Weekly Reports<br/>PDF 리포트]
+    end
+
+    %% ========================================
+    %% 메인 플로우: 사용자 채팅
+    %% ========================================
+
+    User -->|1. 질문| WebUI
+    WebUI -->|2. API 호출| RAGChatAPI
+    RAGChatAPI -->|3. RAG 요청| RAGService
+    RAGService -->|4. 컨텍스트 검색| Retriever
+    Retriever -->|5. 시맨틱 검색| VectorDB
+    VectorDB -->|6. 관련 문서 반환| Retriever
+    Retriever -->|7. 문서 전달| RAGService
+    RAGService -->|8. 프롬프트 구성| LLMService
+    LLMService -->|9. LLM 호출| OpenAI
+    OpenAI -->|10. 응답 생성| LLMService
+    LLMService -->|11. 응답 반환| RAGChatAPI
+    RAGChatAPI -->|12. 대화 기록| ConvLogger
+    ConvLogger -->|13. 저장| ConvLog
+    RAGChatAPI -->|14. 응답 전달| WebUI
+    WebUI -->|15. 답변 표시| User
+
+    %% ========================================
+    %% 문서 임베딩 플로우
+    %% ========================================
+
+    User -.->|문서 업로드| IngestAPI
+    IngestAPI -.->|문서 처리| IngestService
+    IngestService -.->|텍스트 분할| IngestService
+    IngestService -.->|임베딩 생성| OpenAI
+    IngestService -.->|벡터 저장| VectorDB
+
+    %% ========================================
+    %% 피드백 & 분석 플로우
+    %% ========================================
+
+    User -.->|👍/👎 피드백| FeedbackAPI
+    FeedbackAPI -.->|피드백 저장| FeedbackLog
+
+    ConvLog -.->|배치 분석| Analyzer
+    Analyzer -.->|감정 분석| OpenAI
+    Analyzer -.->|주제 추출| OpenAI
+    Analyzer -.->|결과 업데이트| ConvLog
+
+    %% ========================================
+    %% 리포팅 플로우
+    %% ========================================
+
+    ConvLog -.->|데이터 조회| ReportGen
+    FeedbackLog -.->|피드백 통계| ReportGen
+    ReportGen -.->|PDF 생성| Reports
+    Reports -.->|파일 업로드| SlackUploader
+    SlackUploader -.->|알림 전송| Slack
+
+    %% ========================================
+    %% Slack 명령 플로우
+    %% ========================================
+
+    SlackUser -->|/ai-report| Slack
+    Slack -->|Slash Command| SlackCmdAPI
+    SlackCmdAPI -.->|백그라운드 실행| ReportGen
+    ReportGen -.->|리포트 생성| Reports
+    Reports -.->|업로드| SlackUploader
+    SlackUploader -.->|파일 & 통계| Slack
+    Slack -.->|알림 수신| SlackUser
+
+    %% ========================================
+    %% 대시보드 & 모니터링
+    %% ========================================
+
+    ConvLog -.->|실시간 조회| Dashboard
+    FeedbackLog -.->|통계 분석| Dashboard
+    Dashboard -.->|시각화| User
+
+    PostgreSQL -.->|정기 백업| BackupMgr
+    BackupMgr -.->|백업 알림| Slack
+
+    Monitor -.->|시스템 상태| Slack
+
+    %% ========================================
+    %% 스케줄러 자동화
+    %% ========================================
+
+    Scheduler -.->|매일 자정| BackupMgr
+    Scheduler -.->|30분마다| Monitor
+    Scheduler -.->|주간 리포트| ReportGen
+
+    %% ========================================
+    %% 스타일링
+    %% ========================================
+
+    classDef userClass fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef apiClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef serviceClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef dbClass fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef externalClass fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef utilClass fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+
+    class User,SlackUser,WebUI userClass
+    class ChatAPI,RAGChatAPI,PersonalAPI,IngestAPI,FeedbackAPI,InsightsAPI,ReportAPI,SlackCmdAPI apiClass
+    class LLMService,RAGService,Retriever,Personalizer,IngestService,Analyzer,ConvLogger serviceClass
+    class VectorDB,PostgreSQL,ConvLog,FeedbackLog dbClass
+    class OpenAI,Slack externalClass
+    class ReportGen,SlackUploader,BackupMgr,Monitor,Dashboard,Scheduler,Reports utilClass

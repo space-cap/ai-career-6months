@@ -6,6 +6,7 @@ from sqlalchemy import text
 from app.database import get_db
 from app.core.config import settings
 from app.routers import report, maintenance, feedback
+from app.utils import slack_command_handler
 
 app = FastAPI(
     title="AI Career 6 Months",
@@ -32,6 +33,7 @@ app.include_router(insights.router, prefix="/api", tags=["insights"])
 app.include_router(feedback.router, prefix="/api", tags=["feedback"])
 app.include_router(report.router)
 app.include_router(maintenance.router)
+app.include_router(slack_command_handler.router, tags=["slack"])
 
 
 @app.get("/api/health")
