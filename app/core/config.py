@@ -14,7 +14,12 @@ class Settings(BaseSettings):
     SLACK_CHANNEL: str | None = None
     SLACK_VERIFICATION_TOKEN: str | None = None  # Slack Slash Command 검증 토큰
 
-    # 로그 보관 기간 (일)
+    # 환경 구분
+    ENV: str = "development"  # development | production
+
+    # 로그 설정
+    LOG_LEVEL: str = "INFO"  # DEBUG | INFO | WARNING | ERROR | CRITICAL
+    LOG_DIR: str = "./logs"
     LOG_RETENTION_DAYS: int = 30
 
     # 스케줄러 설정
